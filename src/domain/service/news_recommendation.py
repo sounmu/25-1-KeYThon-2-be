@@ -4,6 +4,7 @@ import os
 
 import csv
 import pandas as pd
+import numpy as np
 
 from naverNews import fetch_naver_news, find_office_id, query_naver_links
 
@@ -16,9 +17,18 @@ async def naver_main(query):
     office_ids = [find_office_id(url) for url in urls]
 
     for i in range(len(office_ids)):
-        if office
+        if office_ids[i] == None:
+            urls[i] = None
+            descriptions[i] = None
+            titles[i] = None
     
-    print(office_ids[9])
+    office_ids = list(filter(None, office_ids))
+    urls = list(filter(None, urls))
+    descriptions = list(filter(None, descriptions))
+    titles = list(filter(None, titles))
+    
+    
+    print(len(office_ids))
 
     return urls, descriptions, titles, office_ids
 
@@ -46,25 +56,50 @@ async def user_polar(polar: list, query: str):
     stds = [std_left, std_cent, std_right]
     
     # 언론사 편향 정보
-    office_df = pd.read_csv('press_list.csv')
-    office_df.head()
-    of_pol_col = office_df['성향']
+    curr_dir = os.path.dirname(__file__)
+    file_path = os.path.join(curr_dir, 'press_list.csv')
+    office_df = pd.read_csv(file_path)
     
     # 편향도 리스트 제작
-    political_orientation = [office_df[office_df['언론사'] == media]['성향'].values[0] for media in office_ids]
+    media_orientation = pd.Series(office_df['성향'].values, index=office_df['언론사']).to_dict()
+    political_orientation = []
+    for office in office_ids:
+        pol = media_orientation[office]
+        political_orientation.append(pol)
+
     print(political_orientation)
     
-    counts = [round(ratio * len(urls)) for ratio in stds]
+    orientation = ['진보', '중도', '보수']
     
-    
-    
-    
-    
-    
+    # 각 카테고리별 개수
+    counts = [round(ratio * len(political_orientation)) for ratio in stds]
+    print(counts)
+    indices = []
+    for orient, count in zip(orientation, counts):
+        # 해당 성향의 인덱스를 추출
+        orientation_indices = [i for i, value in enumerate(political_orientation) if value == orient]
+        # np.random.choice를 사용하여 중복 없이 랜덤 인덱스 추출
+        max_count = min(len(orientation_indices), count)
+        random_indices = np.random.choice(orientation_indices, size=max_count, replace = False)
+        
+        # 추출된 인덱스를 int로 변환하여 리스트에 추가
+        indices.extend(random_indices.astype(int).tolist())
 
-
+    # 해당 인덱스
+    indexes = sorted(indices)
+    s_descriptions = [descriptions[i] for i in indexes]
+    s_titles = [titles[i] for i in indexes]
+    s_urls = [urls[i] for i in indexes]
+    s_office = [office_ids[i] for i in indexes]
+    s_bias = [political_orientation[i] for i in indexes]
+    
+    return s_descriptions, s_titles, s_urls, s_office, s_bias
+    
+    
+'''
 # asyncio 실행
 if __name__ == "__main__":
     polar = [0.5, 0.3, 0.2]
     query = '대통령'
     asyncio.run(user_polar(polar, query))
+'''

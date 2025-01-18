@@ -129,7 +129,7 @@ def find_office_id(url):
     match = re.search(r'/article/(\d+)/', url)
     if match:
         office_id = match.group(1)
-        return press_dict.get(office_id, "Unknown")
+        return press_dict.get(office_id, "")
     return None
 
 
