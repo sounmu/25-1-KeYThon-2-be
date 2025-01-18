@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Dict
+
 
 class RouteReqPostTopic(BaseModel):
     progressive: float = Field(title="진보 수치", ge=0, le=100, example=0)

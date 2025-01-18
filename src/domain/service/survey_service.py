@@ -1,8 +1,6 @@
 from fastapi import HTTPException, status
 
 from domain.schema.survey_schema import DomainResSurveyResult, RouteReqPostSurvey, RouteResPostSurvey
-from domain.schema.topic_schema import RouteReqPostTopic, RouteResPostTopic
-from domain.service.news_recommendation import user_polar_result
 
 
 async def service_create_survey(
