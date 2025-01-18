@@ -10,7 +10,6 @@ def load_weights_from_csv(csv_path: str) -> list[list[float]]:
     with open(csv_path, mode='r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # 문자열을 float으로 변환
             left_val = float(row['left'])
             center_val = float(row['center'])
             right_val = float(row['right'])
