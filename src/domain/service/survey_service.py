@@ -44,22 +44,13 @@ async def service_create_survey(
 async def service_create_topic(
     data: RouteReqPostTopic,
 ) -> RouteResPostTopic:
-    result = await service_create_topic(
-        RouteReqPostTopic(
-            progressive=data.progressive,
-            moderate=data.moderate,
-            conservative=data.conservative,
-            query=data.query,
-        )
-    )
     polar = [data.progressive, data.moderate, data.conservative]
     query = data.query
-    
+
     data, count = user_polar_result(polar, query)
-    
+
     response = { "data":data,
                 "count":count}
-    
+
     return response
-    
-    
+
