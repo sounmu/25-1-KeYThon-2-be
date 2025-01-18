@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Body, status
+from fastapi import APIRouter, status
 
 from domain.schema.survey_schema import RouteReqPostSurvey, RouteResPostSurvey
 from domain.schema.topic_schema import RouteReqPostTopic, RouteResPostTopic
@@ -33,13 +31,14 @@ async def create_survey(
     status_code=status.HTTP_200_OK,
 )
 async def create_topic(
-    point: Annotated[int, Body(ge=0, le=100, description="The point")],
-    topic: Annotated[str, Body(description="The topic")],
+    data: RouteReqPostTopic,
 ) -> RouteResPostTopic:
     result = await service_create_survey(
         RouteReqPostTopic(
-            point=point,
-            topic=topic,
+            progressive=data.progressive,
+            moderate=data.moderate,
+            conservative=data.conservative,
+            query=data.query,
         )
     )
     return result

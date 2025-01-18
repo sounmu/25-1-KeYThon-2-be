@@ -21,8 +21,10 @@ class RouteResPostSurvey(BaseModel):
 
 
 class RouteReqPostTopic(BaseModel):
-    point: int = Field(title="The point", ge=0, le=100)
-    topic: str = Field(title="The topic")
+    progressive: float = Field(title="진보", example=33.33)
+    moderate: float = Field(title="중도", example=33.33)
+    conservative: float = Field(title="보수", example=33.33)
+    query: str = Field(title="검색어")
 
 
 class RouteResPostTopic(BaseModel):
