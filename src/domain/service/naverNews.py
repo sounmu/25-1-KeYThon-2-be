@@ -1,5 +1,14 @@
 import requests
+import asyncio
+import aiohttp
+
 import json
+import re
+
+import csv
+import pandas as pd
+
+# 1에 가까울수록 진보, 10에에 
 
 press_dict = {
     "018": "이데일리",
@@ -94,53 +103,71 @@ CLIENT_ID = "bAH1YsUVJACd04LZpvmx"  # 발급받은 클라이언트 ID
 CLIENT_SECRET = "QRde3I7aiD"  # 발급받은 클라이언트 시크릿
 
 
-# API 요청 함수
-def search_naver_news(query, display=10, start=1, sort="date"):
+async def fetch_naver_news(session, query, display=50, start=1, sort="date"):
     url = "https://openapi.naver.com/v1/search/news.json"
     headers = {
         "X-Naver-Client-Id": CLIENT_ID,
-        "X-Naver-Client-Secret": CLIENT_SECRET
+        "X-Naver-Client-Secret": CLIENT_SECRET,
     }
     params = {
         "query": query,
         "display": display,
         "start": start,
-        "sort": sort
+        "sort": sort,
     }
 
-    response = requests.get(url, headers=headers, params=params)
-    
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error Code: {response.status_code}")
-        return None
-
-def query_naver_link(query):
-    urls = []
-    descriptions = []
-    titles = []
-    
-    query = "대통령"  # 검색어
-    results = search_naver_news(query, sort="date")
-    
-    item = results['items']
-    
-    for i in range(len(item)):
-        data = item[i]
-        title = data['title']
-        titles.append(title)
-        des = data['description']
-        descriptions.append(des)
-        link = data['link']
-        urls.append(link)
-    
-    return urls, descriptions, titles
+    async with session.get(url, headers=headers, params=params) as response:
+        if response.status == 200:
+            return await response.json()
+        else:
+            print(f"Error Code: {response.status}")
+            return None
 
 
-# 테스트 실행
+# URL에서 언론사 ID 추출 함수
+def find_office_id(url):
+    match = re.search(r'/article/(\d+)/', url)
+    if match:
+        office_id = match.group(1)
+        return press_dict.get(office_id, "Unknown")
+    return None
+
+
+# 뉴스 링크 가져오기
+async def query_naver_links(query):
+    async with aiohttp.ClientSession() as session:
+        news_data = await fetch_naver_news(session, query)
+
+        if not news_data:
+            print("No data fetched.")
+            return [], [], []
+
+        urls, descriptions, titles = [], [], []
+
+        for item in news_data.get("items", []):
+            urls.append(item["link"])
+            descriptions.append(item["description"])
+            titles.append(item["title"])
+
+        return urls, descriptions, titles
+
+
+async def naver_main():
+    query = "대통령"
+    print(f"Query: {query}")
+
+    urls, descriptions, titles = await query_naver_links(query)
+    office_ids = [find_office_id(url) for url in urls]
+
+    # 언론사 정보 출력
+    for url, office_id in zip(urls, office_ids):
+        print(f"URL: {url}")
+        print(f"언론사: {office_id}")
+
+    print(f"총 언론사 수: {len([o for o in office_ids if o])}")
+
+'''
+# asyncio 실행
 if __name__ == "__main__":
-    query = "대통령"  # 검색어
-    
-    urls, descriptions, titles = query_naver_link(query)
-    print(urls[0])
+    asyncio.run(main())
+'''
