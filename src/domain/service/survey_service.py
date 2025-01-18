@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 
-from domain.schema.survey_schema import RouteReqPostSurvey, RouteResPostSurvey
+from domain.schema.survey_schema import DomainResSurveyResult, RouteReqPostSurvey, RouteResPostSurvey
 
 
 async def service_create_survey(
@@ -13,10 +13,14 @@ async def service_create_survey(
             # 새로운 로직 필요
             score += answer
 
-        response = RouteResPostSurvey(
+        res = DomainResSurveyResult(
             progressive=score,
             moderate=score,
             conservative=score,
+        )
+
+        response = RouteResPostSurvey(
+            result=res,
         )
 
     except HTTPException as e:

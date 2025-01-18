@@ -7,14 +7,17 @@ class RouteReqPostSurvey(BaseModel):
     answers: list[int] = Field(title="The survey answers")
 
 
-class RouteResPostSurvey(BaseModel):
-    progressive: float = Field(title="진보", example=33.33) # 소수점 둘째 자리까지, 자동 반올림
-    moderate: float = Field(title="진보", example=33.33)
-    conservative: float = Field(title="진보", example=33.33)
+class DomainResSurveyResult(BaseModel):
+    progressive: float = Field(title="진보", example=33.33)
+    moderate: float = Field(title="중도", example=33.33)
+    conservative: float = Field(title="보수", example=33.33)
 
     @validator("progressive", "moderate", "conservative", pre=True)
     def round_to_two_decimal_places(cls, value):
         return round(value, 2)
+
+class RouteResPostSurvey(BaseModel):
+    result: DomainResSurveyResult
 
 
 class RouteReqPostTopic(BaseModel):
