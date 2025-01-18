@@ -95,7 +95,17 @@ async def user_polar_result(polar: list, query: str):
     s_office = [office_ids[i] for i in indexes]
     s_bias = [political_orientation[i] for i in indexes]
     
-    return s_descriptions, s_titles, s_urls, s_office, s_bias
+    data = []
+    
+    for i in range(len(indexes)):
+        data.append({
+            "title" : s_titles[i], # 제목
+            "descriptions" : s_descriptions[i], # 요약
+            "office" : s_office[i], # 언론사
+            "url" : s_urls[i], # 뉴스 링크
+            "bias" : s_bias[i] # 정치 성향
+        })
+    return data, len(indexes) # data와 총 개수
     
     
 '''
