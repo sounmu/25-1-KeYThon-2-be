@@ -1,11 +1,6 @@
-import asyncio
-import csv
-import json
 import re
 
 import aiohttp
-import pandas as pd
-import requests
 
 # 1에 가까울수록 진보, 10에 가까울수록 보수
 

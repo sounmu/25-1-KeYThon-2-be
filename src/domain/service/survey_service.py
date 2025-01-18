@@ -1,13 +1,15 @@
+import csv
+import os
+
 from fastapi import HTTPException, status
 
 from domain.schema.survey_schema import DomainResSurveyResult, RouteReqPostSurvey, RouteResPostSurvey
 
-import csv
 
 def load_weights_from_csv(csv_path: str) -> list[list[float]]:
 
     weights = []
-    with open(csv_path, mode='r', encoding='utf-8-sig') as f:
+    with open(csv_path, encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
             left_val = float(row['left'])
@@ -21,7 +23,10 @@ async def service_create_survey(
     data: RouteReqPostSurvey
 ) -> RouteResPostSurvey:
     try:
-        weights = load_weights_from_csv('question_list.csv')
+        curr_dir = os.path.dirname(__file__)
+        file_path = os.path.join(curr_dir, 'question_list.csv')
+
+        weights = load_weights_from_csv(file_path)
         left, center, right = 0, 0, 0
         for answer, weight in zip(data.answers, weights):
             left += answer * weight[0]
@@ -52,5 +57,3 @@ async def service_create_survey(
         ) from e
 
     return response
-
-
