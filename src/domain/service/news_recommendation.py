@@ -40,7 +40,7 @@ async def naver_main(query):
 [2] : 보수
 
 '''
-async def user_polar(polar: list, query: str):
+async def user_polar_result(polar: list, query: str):
     urls, descriptions, titles, office_ids = await naver_main(query)
     # 역비율
     left = 1/polar[0]
