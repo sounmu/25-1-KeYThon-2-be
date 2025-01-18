@@ -6,7 +6,7 @@ import csv
 import pandas as pd
 import numpy as np
 
-from naverNews import fetch_naver_news, find_office_id, query_naver_links
+from domain.service.naverNews import fetch_naver_news, find_office_id, query_naver_links
 
 print(os.getcwd())
 
