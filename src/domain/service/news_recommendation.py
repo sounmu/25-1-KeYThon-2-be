@@ -25,9 +25,54 @@ async def naver_main(query):
     descriptions = list(filter(None, descriptions))
     titles = list(filter(None, titles))
 
+    curr_dir = os.path.dirname(__file__)
+    file_path = os.path.join(curr_dir, 'press_list.csv')
+    office_df = pd.read_csv(file_path)
+
+        # 예: CSV에서 'press' 열과 'bias' 열이 있다고 가정
+    press_bias_map = pd.Series(
+        office_df['성향'].values,
+        index=office_df['언론사']
+    ).to_dict()
+
+    # 3) 기사별 성향 파악
+    political_orientation = []
+    for office_id in office_ids:
+        bias = press_bias_map.get(office_id, None)
+        political_orientation.append(bias)
+
+    # 4) 성향별 인덱스 묶기
+    orient_dict = {
+        '진보': [],
+        '중도': [],
+        '보수': []
+    }
+    for i, bias in enumerate(political_orientation):
+        if bias in orient_dict:  # '진보'/'중도'/'보수' 중 하나면
+            orient_dict[bias].append(i)
+
+    # 5) 각 성향별로 최대 10개씩만 사용 (앞에서부터 10개 or 무작위)
+    selected_indexes = []
+    for bias_type in ['진보', '중도', '보수']:
+        idx_list = orient_dict[bias_type]
+        limit = min(len(idx_list), 5)
+        selected_indexes.extend(idx_list[:limit])
+        # 무작위 선택을 원하면 random 모듈 사용
+        # random_indexes = random.sample(idx_list, limit)
+        # selected_indexes.extend(random_indexes)
+    """selected_indexes.extend(orient_dict['진보'])
+    selected_indexes.extend(orient_dict['중도'])
+    selected_indexes.extend(orient_dict['보수'])"""
+    selected_indexes.sort()
+
+    # 6) 필터링된 기사만 남기기
+    filtered_urls = [urls[i] for i in selected_indexes]
+    filtered_desc = [descriptions[i] for i in selected_indexes]
+    filtered_titl = [titles[i] for i in selected_indexes]
+    filtered_offi = [office_ids[i] for i in selected_indexes]
     # print(len(office_ids))
 
-    return urls, descriptions, titles, office_ids
+    return filtered_urls, filtered_desc, filtered_titl, filtered_offi
 
 '''
 사용자 성향 정도

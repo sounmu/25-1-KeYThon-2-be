@@ -97,7 +97,7 @@ CLIENT_ID = "bAH1YsUVJACd04LZpvmx"  # 발급받은 클라이언트 ID
 CLIENT_SECRET = "QRde3I7aiD"  # 발급받은 클라이언트 시크릿
 
 
-async def fetch_naver_news(session, query, display=50, start=1, sort="date"):
+async def fetch_naver_news(session, query, display=100, start=1, sort="sim"):
     url = "https://openapi.naver.com/v1/search/news.json"
     headers = {
         "X-Naver-Client-Id": CLIENT_ID,
