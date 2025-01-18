@@ -9,7 +9,7 @@ from domain.service.naverNews import fetch_naver_news, find_office_id, query_nav
 print(os.getcwd())
 
 async def naver_main(query):
-    print(f"Query: {query}")
+    # print(f"Query: {query}")
 
     urls, descriptions, titles = await query_naver_links(query)
     office_ids = [find_office_id(url) for url in urls]
@@ -25,7 +25,7 @@ async def naver_main(query):
     descriptions = list(filter(None, descriptions))
     titles = list(filter(None, titles))
 
-    print(len(office_ids))
+    # print(len(office_ids))
 
     return urls, descriptions, titles, office_ids
 
@@ -64,13 +64,13 @@ async def user_polar_result(polar: list, query: str):
         pol = media_orientation[office]
         political_orientation.append(pol)
 
-    print(political_orientation)
+    # print(political_orientation)
 
     orientation = ['진보', '중도', '보수']
 
     # 각 카테고리별 개수
     counts = [round(ratio * len(political_orientation)) for ratio in stds]
-    print(counts)
+    # print(counts)
     indices = []
     for orient, count in zip(orientation, counts):
         # 해당 성향의 인덱스를 추출
