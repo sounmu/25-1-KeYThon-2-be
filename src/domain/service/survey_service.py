@@ -9,16 +9,14 @@ async def service_create_survey(
     try:
         score = 0
         for i in range(20):
-            answer = data.answers[str(i)]
-            options = ["강하게 동의", "다소 동의", "약간 동의", "약간 비동의", "다소 비동의", "강하게 비동의"]
-
-            if i % 2 == 1:  # 홀수
-                score += options.index(answer)
-            else:  # 짝수
-                score += 5 - options.index(answer)
+            answer = data.answers[i]
+            # 새로운 로직 필요
+            score += answer
 
         response = RouteResPostSurvey(
-            result=score
+            progressive=score,
+            moderate=score,
+            conservative=score,
         )
 
     except HTTPException as e:
