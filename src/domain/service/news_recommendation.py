@@ -5,7 +5,7 @@ import os
 import csv
 import pandas as pd
 import numpy as np
-
+from domain.schema.topic_schema import DomainResPostTopic
 from domain.service.naverNews import fetch_naver_news, find_office_id, query_naver_links
 
 print(os.getcwd())
@@ -95,16 +95,20 @@ async def user_polar_result(polar: list, query: str):
     s_office = [office_ids[i] for i in indexes]
     s_bias = [political_orientation[i] for i in indexes]
     
+    # JSON 형태로 변환
     data = []
     
     for i in range(len(indexes)):
-        data.append({
-            "title" : s_titles[i], # 제목
-            "descriptions" : s_descriptions[i], # 요약
-            "office" : s_office[i], # 언론사
-            "url" : s_urls[i], # 뉴스 링크
-            "bias" : s_bias[i] # 정치 성향
-        })
+        data.append(
+            DomainResPostTopic(
+                title=s_titles[i], # 제목
+                descriptions=s_descriptions[i], # 요약
+                office=s_office[i], # 언론사
+                url=s_urls[i], # 뉴스 링크
+                bias=s_bias[i] # 정치 성향
+            )
+        )
+
     return data, len(indexes) # data와 총 개수
     
     

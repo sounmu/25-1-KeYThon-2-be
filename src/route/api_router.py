@@ -2,7 +2,8 @@ from fastapi import APIRouter, status
 
 from domain.schema.survey_schema import RouteReqPostSurvey, RouteResPostSurvey
 from domain.schema.topic_schema import RouteReqPostTopic, RouteResPostTopic
-from domain.service.survey_service import service_create_survey, service_create_topic
+from domain.service.survey_service import service_create_survey
+from domain.service.topic_service import service_create_topic
 
 router = APIRouter(
     prefix="/api",
