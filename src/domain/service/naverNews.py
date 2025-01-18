@@ -151,21 +151,6 @@ async def query_naver_links(query):
 
         return urls, descriptions, titles
 
-
-async def naver_main():
-    query = "대통령"
-    print(f"Query: {query}")
-
-    urls, descriptions, titles = await query_naver_links(query)
-    office_ids = [find_office_id(url) for url in urls]
-
-    # 언론사 정보 출력
-    for url, office_id in zip(urls, office_ids):
-        print(f"URL: {url}")
-        print(f"언론사: {office_id}")
-
-    print(f"총 언론사 수: {len([o for o in office_ids if o])}")
-
 '''
 # asyncio 실행
 if __name__ == "__main__":
