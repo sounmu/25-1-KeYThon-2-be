@@ -87,6 +87,8 @@ async def user_polar_result(polar: list, query: str):
 
     # 해당 인덱스
     indexes = sorted(indices)
+    
+    # 인덱스 따라 요약, 제목, 링크, 언론사, 편향 -> 리스트 
     s_descriptions = [descriptions[i] for i in indexes]
     s_titles = [titles[i] for i in indexes]
     s_urls = [urls[i] for i in indexes]
