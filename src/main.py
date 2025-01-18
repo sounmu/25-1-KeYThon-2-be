@@ -34,3 +34,4 @@ app.include_router(api_router)
 @app.get("/")
 async def root():
     return {"message": "KeYThon 2조의 API 서버입니다."}
+
