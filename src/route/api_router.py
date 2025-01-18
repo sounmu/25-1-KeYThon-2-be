@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 
 from domain.schema.survey_schema import RouteReqPostSurvey, RouteResPostSurvey
 from domain.schema.topic_schema import RouteReqPostTopic, RouteResPostTopic
-from domain.service.survey_service import service_create_survey
+from domain.service.survey_service import service_create_survey, service_create_topic
 
 router = APIRouter(
     prefix="/api",
@@ -33,7 +33,7 @@ async def create_survey(
 async def create_topic(
     data: RouteReqPostTopic,
 ) -> RouteResPostTopic:
-    result = await service_create_survey(
+    result = await service_create_topic(
         RouteReqPostTopic(
             progressive=data.progressive,
             moderate=data.moderate,
