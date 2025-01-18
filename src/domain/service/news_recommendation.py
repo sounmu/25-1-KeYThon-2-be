@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from domain.schema.topic_schema import DomainResPostTopic
-from domain.service.naverNews import fetch_naver_news, find_office_id, query_naver_links
+from domain.service.naverNews import find_office_id, query_naver_links
 
 print(os.getcwd())
 
@@ -30,7 +30,7 @@ async def naver_main(query):
     return urls, descriptions, titles, office_ids
 
 '''
-사용자 성향 정도 
+사용자 성향 정도
 [f1, f2, f3] 형태로 받음
 [0] : 진보
 [1] : 중도

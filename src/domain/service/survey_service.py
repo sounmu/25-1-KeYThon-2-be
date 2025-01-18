@@ -9,7 +9,7 @@ from domain.schema.survey_schema import DomainResSurveyResult, RouteReqPostSurve
 def load_weights_from_csv(csv_path: str) -> list[list[float]]:
 
     weights = []
-    with open(csv_path, mode='r', encoding='utf-8-sig') as f:
+    with open(csv_path, encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
             left_val = float(row['left'])
@@ -57,5 +57,3 @@ async def service_create_survey(
         ) from e
 
     return response
-
-

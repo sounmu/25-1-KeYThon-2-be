@@ -1,5 +1,3 @@
-from fastapi import HTTPException, status
-
 from domain.schema.topic_schema import RouteReqPostTopic, RouteResPostTopic
 from domain.service.news_recommendation import user_polar_result
 
