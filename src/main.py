@@ -17,6 +17,7 @@ origins = [
     "https://localhost:8000",
     "http://localhost:8000",
     "http://localhost:5173",
+    "https://25-1-keython-2-fe.vercel.app"
 ]
 
 
